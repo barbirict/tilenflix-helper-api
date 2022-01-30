@@ -22,7 +22,7 @@ module.exports = (sequelize, Sequelize) => {
         email: {
             type: DataTypes.STRING
         },
-        role: {
+        roles: {
             type: DataTypes.STRING
         }
 

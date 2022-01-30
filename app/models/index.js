@@ -21,5 +21,5 @@ db.users = require("./users.model")(sequelize, Sequelize)
 db.requests = require("./requests.model")(sequelize, Sequelize)
 db.incidents = require("./incidents.model")(sequelize, Sequelize)
 db.news = require("./news.model")(sequelize, Sequelize)
-
+db.blacklist = require("./jwtblacklist.model")(sequelize, Sequelize)
 module.exports = db
