@@ -6,14 +6,17 @@ const db = require("./app/models")
 const cookieParser = require("cookie-parser");
 const https= require('https')
 const fs = require('fs')
-
+const {cleanStart, createRootDEV} = require('./app/helpers/serverResetDev')
 //db.sequelize.sync()
 
 //DEV ONLY:
 /*
-db.sequelize.sync({ force: true }).then(() => {
-    console.log("Drop and re-sync db.");
-})
+cleanStart()
+    .then(d => {
+        createRootDEV()
+            .then(d => {
+            })
+    })
 */
 
 //Cors
