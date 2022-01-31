@@ -11,14 +11,14 @@ module.exports = app => {
 
     authRouter.post("/login", authentication.login)
 
-    authRouter.post("/logout", authentication.logout)
+    authRouter.post("/logout", authorization("User"), authentication.logout)
 
     authRouter.post("/forgot", authentication.reset)
 
     // Users:
     let userRouter = router
 
-    userRouter.post("/new", /*authorization("Admin"),*/ user.create)
+    userRouter.post("/new", authorization("Admin"), user.create)
 
     app.use("/auth", authRouter)
     app.use("/data/users", userRouter)

@@ -25,7 +25,7 @@ exports.login = (req, res) => {
                                 data: null,
                                 token: null
                             }
-                            let token = jwtS.sign({id: data.id, roles: data.roles}, secret)
+                            let token = jwtS.sign({id: data.id, roles: data.roles}, secret, {expiresIn: '1d'})
                             toReturn.data = cleanReturn(data)
                             toReturn.token = token
                             res.send(toReturn)
@@ -37,46 +37,30 @@ exports.login = (req, res) => {
         })
 }
 
-exports.logout = (req) => {
+exports.logout = (req, res) => {
  const toBlacklist = req.headers.authorization
-    Blacklist.add(toBlacklist)
+    Blacklist.add(toBlacklist).then(r => {
+        if(r) {
+            res.status(200).send()
+        }
+        else res.status(400).send()
+    })
+        .catch(err => {
+            console.log(err)
+            res.status(400).send()
+        })
 }
 
-exports.auth =  async (req, res) => {
-    const toBlacklist = req.headers.authorization
-    console.log("not ", toBlacklist)
-    let isValid = await Blacklist.check(toBlacklist)
-    console.log(".auth.isValid: ",isValid)
-    if(!isValid){
-        console.log("passed")
-        console.log("okoli")
-        User.findByPk(req.user.id)
+exports.auth =  (req, res) => {
+     User.findByPk(req.user.id)
             .then(data => {
                 if(data) {
                     data.password = null
-                    res.send(data)
+                    res.send(cleanReturn(data))
                 }
                 else res.status(404).send()
             })
-    }
-    else console.log("no pass")
-    /*
-    jwt({secret, algorithms: ['HS256']}),
-        (req, res, next) => {
-            isValid = true
 
-        }
-    /*
-    if(!Blacklist.check(toBlacklist)){
-        console.log("passed")
-        jwt({secret, algorithms: ['HS256']}),
-            ((req, res) => {
-
-            })
-    }
-    console.log("okoli")
-    res.status(501).send()
-*/
 }
 
 exports.reset = (req, res) => {
