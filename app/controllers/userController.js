@@ -4,9 +4,11 @@ const Op = db.sequelize.Op
 const { v4: uuidv4 } = require('uuid');
 const {encryptData} = require("./encryptionController")
 const bcrypt = require("bcrypt");
+const {cleanReturn} = require("../helpers/cleanReturn")
 
 exports.create = (req, res) => {
-    let data = req.body.data
+
+    let data = req.body
     if (!data.name || !data.password || !data.surname || !data.username
         || !data.email || !data.roles) {
         res.status(400).send({
@@ -22,16 +24,16 @@ exports.create = (req, res) => {
             password: hash,
             name: data.name,
             surname: data.surname,
-            roles: data.roles
+            roles: JSON.stringify(data.roles)
         }
+        console.log(user)
 
         User.create(user)
             .then(data => {
-                data.role = null
-                data.password = null
-                res.send(data)
+                res.send(cleanReturn(data))
             })
             .catch(err => {
+                console.log(err)
                 res.status(500).send({
                     message: "500 - Error creating user!"
                 })

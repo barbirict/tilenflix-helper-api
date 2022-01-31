@@ -21,5 +21,5 @@ module.exports = (sequelize, Sequelize) => {
         }
     })
 
-    return Incident
+    return News
 }

@@ -1,6 +1,6 @@
 const db = require("../models")
 const Blacklist = db.blacklist
-const Op = db.sequelize.Op
+const Op = db.Sequelize.Op
 const { v4: uuidv4 } = require('uuid');
 const bcrpyt = require("bcrypt");
 
@@ -16,13 +16,16 @@ exports.add = (jw) => {
         })
 }
 
-exports.check = (data) => {
-    const _jw = data
-    let condition = _jw ? { _jw: { [Op.like]: `%${_jw}%` }} : null
-
-    Blacklist.findOne({where: condition})
+exports.check = async (toBlacklist) => {
+    const _jw = toBlacklist
+    let condition = _jw ? {_jw: {[Op.like]: `%${_jw}%`}} : null
+   return await Blacklist.findOne({where: condition})
         .then(data => {
+            console.log("data: ", !!data)
+            return !!data
+        })
+        .catch(err => {
+            console.log("err ", err)
             return true
         })
-    return false
 }

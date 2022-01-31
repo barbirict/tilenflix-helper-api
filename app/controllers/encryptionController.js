@@ -1,4 +1,4 @@
-const sKey = require("../config/keys.json").keys.sha256.key
+const sKey = require("../config/keys.json").sha256.key
 const crypto = require("crypto")
 
 exports.encryptData = (data) => {
