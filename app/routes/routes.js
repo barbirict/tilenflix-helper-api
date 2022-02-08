@@ -2,6 +2,7 @@ const router = require("express").Router()
 const user = require('../controllers/userController')
 const authentication = require('../controllers/authenticationController')
 const authorization = require('../controllers/authorizationMiddleware')
+const requests = require('../controllers/requestsController')
 module.exports = app => {
 
     //Auth:
@@ -22,6 +23,19 @@ module.exports = app => {
     userRouter.put("/:id", authorization("Admin"), user.editOne)
     userRouter.delete("/:id", authorization("Admin"), user.deleteOne)
 
+    let requestRouter = router
+
+    requestRouter.post("/new", authorization("User"), requests.create)
+    requestRouter.get("/0/:id", authorization("Service_user"), requests.getOne)
+    requestRouter.get("/", authorization("Service_user"), requests.getAll)
+    requestRouter.get("/:date_range", authorization("Service_user"), requests.getDateRange)
+    requestRouter.get("/1/:id", authorization("User"), requests.getBySubId)
+    requestRouter.get("/2/:type", authorization("Service_user"), requests.getByType)
+    requestRouter.get("/verify/:title", authorization("User"), requests.verify)
+    requestRouter.put("/:id", authorization("Service_user"), requests.modifyId)
+    requestRouter.delete("/:id", authorization("Admin"), requests.deleteId)
+
     app.use("/auth", authRouter)
     app.use("/data/users", userRouter)
+    app.use("/data/requests")
 }
