@@ -15,14 +15,14 @@ module.exports = app => {
 
     // Users:
     let userRouter = router
-
+/*
     userRouter.post("/new", authorization("Admin"), user.create)
     userRouter.get("/:id", authorization("User"), user.getOne)
     userRouter.get("/", authorization("Admin"), user.getAll)
     userRouter.get("/:role", authorization("Admin"), user.getAllRoles)
     userRouter.put("/:id", authorization("Admin"), user.editOne)
     userRouter.delete("/:id", authorization("Admin"), user.deleteOne)
-
+*/
     let requestRouter = router
 
     requestRouter.post("/new", authorization("User"), requests.create)
@@ -31,11 +31,12 @@ module.exports = app => {
     requestRouter.get("/:date_range", authorization("Service_user"), requests.getDateRange)
     requestRouter.get("/1/:id", authorization("User"), requests.getBySubId)
     requestRouter.get("/2/:type", authorization("Service_user"), requests.getByType)
-    requestRouter.get("/verify/:title", authorization("User"), requests.verify)
+    requestRouter.get("/verify/:type", authorization("User"), requests.verify)
     requestRouter.put("/:id", authorization("Service_user"), requests.modifyId)
     requestRouter.delete("/:id", authorization("Admin"), requests.deleteId)
 
     app.use("/auth", authRouter)
+    app.use("/requests", requestRouter)
     app.use("/data/users", userRouter)
-    app.use("/data/requests")
+
 }

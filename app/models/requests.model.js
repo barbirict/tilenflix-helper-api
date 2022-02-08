@@ -2,9 +2,10 @@ const {DataTypes} = require("sequelize");
 module.exports = (sequelize, Sequelize) => {
     const Request = sequelize.define("request", {
         id: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
         requester_id: {
             type: DataTypes.STRING
@@ -13,10 +14,11 @@ module.exports = (sequelize, Sequelize) => {
             type: DataTypes.STRING
         },
         date_reported: {
-            type: DataTypes.DATE
+            type: DataTypes.STRING
         },
         date_finished: {
-            type: DataTypes.DATE
+            type: DataTypes.STRING,
+            allowNull: true
         },
         comments: {
             type: DataTypes.STRING

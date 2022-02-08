@@ -1,6 +1,7 @@
 const db = require("../models")
 const Op = db.Sequelize.Op
 const User = db.users
+const Requests = db.requests
 exports.ifExists = async function(username, email) {
     let condU = username ? {username: {[Op.like]: `%${username}%`}} : null
     let condE = email ? {email: {[Op.like]: `%${email}%`}} : null
@@ -24,4 +25,11 @@ exports.ifExistsId = async function(id){
             if(data) uExist = true
         })
     return uExist
+}
+exports.ifRequestItemExists = function (data, item) {
+    for(let i = 0; i<data.length; i++){
+        console.log(data[i].item, "||", item)
+        if(data[i].item === item) return true
+    }
+    return false
 }
