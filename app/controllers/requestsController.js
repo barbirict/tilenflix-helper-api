@@ -9,7 +9,7 @@ const moviedb = new MovieDb(keys["movie-db-key"])
 exports.create = (req, res) => {
     console.log("UH")
     let data = req.body
-    if(!data.item){
+    if (!data.item) {
         console.log("ye ye")
         res.status(400).send()
         return
@@ -19,13 +19,13 @@ exports.create = (req, res) => {
         item: JSON.stringify(data.item),
         date_reported: Date.now().toString(),
         comments: [],
-        status: "reported"
+        status: "submit"
 
     }
     console.log("in 1")
     Request.findAll()
         .then(resData => {
-            if(!ifRequestItemExists(resData, request.item)) {
+            if (!ifRequestItemExists(resData, request.item)) {
                 const text = "User " + req.user.id +
                     "has issued a new request REQ000" + resData.length + 1
                 const firstCom = {
@@ -46,8 +46,7 @@ exports.create = (req, res) => {
                         console.log(err)
                         res.status.send(500)
                     })
-            }
-            else res.status(403).send()
+            } else res.status(403).send()
         })
         .catch(err => {
             console.log(err)
@@ -159,34 +158,32 @@ exports.getByType = (req, res) => {
 exports.verify = (req, res) => {
     const type = req.params.type
     const title = req.query.title
-
-    if(type === 'tv'){
-        moviedb.searchTv({query: title})
-            .then(data => {
-                if(data) {
-                    res.send(data)
-                }
-                else res.status(404).send()
-            })
-            .catch(err => {
-                console.log(err)
-                res.status(500).send()
-            })
-    }
-    else if(type ==='movie'){
-        moviedb.searchMovie({query: title})
-            .then(data => {
-                if(data) {
-                    res.send(data)
-                }
-                else res.status(404).send()
-            })
-            .catch(err => {
-                console.log(err)
-                res.status(500).send()
-            })
-    }
-    else res.status(400).send()
+    console.log("typ: " + type + " titl " + title)
+    if (title) {
+        if (type === 'tv') {
+            moviedb.searchTv({query: title})
+                .then(data => {
+                    if (data) {
+                        res.send(data)
+                    } else res.status(404).send()
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.status(500).send()
+                })
+        } else if (type === 'movie') {
+            moviedb.searchMovie({query: title})
+                .then(data => {
+                    if (data) {
+                        res.send(data)
+                    } else res.status(404).send()
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.status(500).send()
+                })
+        } else res.status(400).send()
+    } else res.status(400).send()
     /*
 */
 }
