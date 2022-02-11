@@ -9,6 +9,7 @@ const moviedb = new MovieDb(keys["movie-db-key"])
 exports.create = (req, res) => {
     console.log("UH")
     let data = req.body
+    console.log(req.body)
     if (!data.item) {
         console.log("ye ye")
         res.status(400).send()
@@ -35,6 +36,15 @@ exports.create = (req, res) => {
                     date: Date.now().toString()
                 }
                 request.comments.push(firstCom)
+                if(data.comment){
+                    const uCom = {
+                        type: "info",
+                        user: "submitter",
+                        comment: data.comment,
+                        date: Date.now().toString()
+                    }
+                    request.comments.push(uCom)
+                }
                 request.comments = JSON.stringify(request.comments)
                 Request.create(request)
                     .then(data => {
