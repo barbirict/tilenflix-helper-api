@@ -1,12 +1,13 @@
-const router = require("express").Router()
+const router = require("express")
 const user = require('../controllers/userController')
 const authentication = require('../controllers/authenticationController')
 const authorization = require('../controllers/authorizationMiddleware')
 const requests = require('../controllers/requestsController')
+const plex = require('../controllers/plexController')
 module.exports = app => {
 
     //Auth:
-    let authRouter = router
+    let authRouter = router.Router()
 
     authRouter.post("/", authorization("User"), authentication.auth)
     authRouter.post("/login", authentication.login)
@@ -14,7 +15,7 @@ module.exports = app => {
     authRouter.post("/forgot", authentication.reset)
 
     // Users:
-    let userRouter = router
+    let userRouter = router.Router()
 
     userRouter.post("/new", authorization("Admin"), user.create)
     userRouter.get("/:id", authorization("User"), user.getOne)
@@ -23,7 +24,9 @@ module.exports = app => {
     userRouter.put("/:id", authorization("Admin"), user.editOne)
     userRouter.delete("/:id", authorization("Admin"), user.deleteOne)
 
-    let requestRouter = router
+
+    let requestRouter = router.Router()
+
 
     requestRouter.post("/requests/new", authorization("User"), requests.create)
     requestRouter.get("/requests/:id", authorization("Service_user"), requests.getOne)
@@ -35,8 +38,13 @@ module.exports = app => {
     requestRouter.put("/requests/:id", authorization("Service_user"), requests.modifyId)
     requestRouter.delete("/requests/:id", authorization("Admin"), requests.deleteId)
 
+    let plexRouter = router.Router()
+
+    plexRouter.get("/:type", authorization("User"), plex.getRecent)
+
     app.use("/auth", authRouter)
     app.use("/data", requestRouter)
     app.use("/data/users", userRouter)
+    app.use("/data/plex", plexRouter)
 
 }
