@@ -4,7 +4,7 @@ const isBetween = require('dayjs/plugin/isBetween')
 dayjs.extend(isBetween)
 const client = new PlexAPI({hostname: "s1.home.io", username:"barbiric.tilen@gmail.com", password: "Kajtekuracremi1.", managedUser: {name: "Tovariš Tilen", pin: "1056"}})
 exports.getRecent = (req, res) => {
-    const type = req.params.type
+    const type = req.params
     const days = req.query.days
     client.find("/library/recentlyAdded", {type: type})
         .then(media => {
